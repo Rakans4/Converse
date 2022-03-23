@@ -1,40 +1,55 @@
-
-import './App.css';
+import "./App.css";
 import { io } from "socket.io-client";
-import Landingpage from './components/landingPage';
-import Chat from './components/chat';
-import Logo from './components/logo';
+import Landingpage from "./components/landingPage";
+import Chat from "./components/chat";
+import Logo from "./components/logo";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
 function App() {
-  // useEffect(()=>{
-  //   const socket = io("localhost:5050");
-  //   socket.on("connect", () => {
-  //     console.log(socket.id);
-  //   });
+  const [friendCode, setFriendCode] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const socket = io("localhost:5050");
+  const navigate = useNavigate();
 
-  //   socket.on('code-register', (data)=>{
-  //     console.log(data)
-  //   })
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+    
+    return () => {
+      //unmount logic here
+      console.log("unmount");
+    };
+  }, []);
 
-  //   return ()=>{
-  //     //unmount logic here
-  //     console.log('unmount')
-  //   }
-  // }, []);
+  function sendMessage(newMessage) {
+    setMessages([...messages, newMessage]);
+    socket.emit(
+      "send-message",
+      JSON.stringify({
+        targetCode: friendCode,
+        content: newMessage,
+      })
+    );
+  }
 
-  // socket.emit('send-message', JSON.stringify())
-
-  function validateChatCode(e){
-    e.preventDefault();
-    console.log('from app.js '+e.target.firstChild.value);
-}
+  function validateChatCode(code) {
+    setFriendCode(code)
+    navigate("chat");
+  }
 
   return (
     <div className="App">
       <Logo />
-      <Landingpage validateChatCode={validateChatCode} />
-      {/* <Chat /> */}
-      
+      <Routes>
+        <Route
+          path="/"
+          element={<Landingpage validateChatCode={validateChatCode} />}
+        />
+        <Route path="chat" element={<Chat sendMessage={sendMessage} messages={messages} />} />
+      </Routes>
     </div>
   );
 }

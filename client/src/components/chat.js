@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Chat = () => {
+const Chat = ({sendMessage, messages}) => {
+  const [newMessage, setNewMessage] = useState('');
+
+  function senMessage(e) {
+    e.preventDefault();
+    console.log(newMessage);
+    sendMessage(newMessage);
+    setNewMessage('');
+  }
+
+  function handleMessage(e) {
+    e.preventDefault();
+    setNewMessage(e.target.value);
+  }
   return (
     <div className="h-screen w-screen">
-      <div>{/* TODO: chat bubbles */}</div>
-      <form>
-        <input type="text" placeholder="..." />
-        <button>
+      <div>{messages.map(message => <div>{message}</div>)}</div>
+      <form onSubmit={senMessage} className="absolute bottom-0">
+        <input value={newMessage} onChange={handleMessage} type="text" placeholder="..." />
+        <button type="submit">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 rotate-90"
+            className="h-5 w-5 rotate-90"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
