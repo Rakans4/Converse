@@ -16,7 +16,7 @@ const Chat = ({sendMessage, messages}) => {
   }
   return (
     <div className="h-screen w-screen">
-      <div>{messages.map(message => <div>{message}</div>)}</div>
+      <div>{messages.map(message => <div>{message.content}</div>)}</div>
       <form onSubmit={senMessage} className="absolute bottom-0">
         <input value={newMessage} onChange={handleMessage} type="text" placeholder="..." />
         <button type="submit">

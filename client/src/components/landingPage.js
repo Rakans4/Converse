@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import Logo from "./logo";
 
-const Landingpage = ({ validateChatCode }) => {
+const Landingpage = ({ validateChatCode, myCode }) => {
   const [code, setCode] = useState('')
 
   function handleCode(e) {
@@ -15,9 +16,11 @@ const Landingpage = ({ validateChatCode }) => {
   }
     
   return (
+    <>
+    <Logo />
     <div className="h-screen w-screen flex items-center justify-center">
       <div className=" flex flex-col items-center justify-between h-80 w-[80%]">
-        <div className="text-4xl font-mono tracking-wide">CODE01ABC</div>
+        <div className="text-4xl font-mono tracking-wide">{myCode}</div>
 
         <form onSubmit={submit} className="flex flex-col items-center">
           <input value={code} onChange={handleCode} type="text" placeholder="enter a code..." className="h-12 w-max px-6 border-[0.5px] border-slate-300 rounded-3xl" />
@@ -25,6 +28,7 @@ const Landingpage = ({ validateChatCode }) => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 
