@@ -9,19 +9,19 @@ function App() {
   const [friendCode, setFriendCode] = useState("");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState(io("localhost:5050"));
+  // const [socket, setSocket] = useState(io("localhost:5050"));
   const [myCode, setMyCode] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log(socket.id);
-    });
+    // socket.on("connect", () => {
+    //   console.log(socket.id);
+    // });
 
-    socket.on('incoming-message', (data)=>{receiveMessage(data.content)});
+    // socket.on('incoming-message', (data)=>{receiveMessage(data.content)});
 
     
-    socket.on('code-register', (data)=>setMyCode(data))
+    // socket.on('code-register', (data)=>setMyCode(data))
     
     return () => {
       //unmount logic here
@@ -34,13 +34,13 @@ function App() {
   function sendMessage(newMessage) {
     setMessages([...messages, {content:newMessage, sent:1}]);
     console.log('friend: '+friendCode+' message: '+newMessage)
-    socket.emit(
-      "send-message",
-      JSON.stringify({
-        targetCode: friendCode,
-        content: newMessage,
-      })
-    );
+    // socket.emit(
+    //   "send-message",
+    //   JSON.stringify({
+    //     targetCode: friendCode,
+    //     content: newMessage,
+    //   })
+    // );
   }
 
   function receiveMessage(newMessage){
