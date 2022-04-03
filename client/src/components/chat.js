@@ -3,6 +3,8 @@ import React, { useState } from "react";
 const Chat = ({ sendMessage, messages }) => {
   const [newMessage, setNewMessage] = useState("");
 
+  console.log('chat render');
+
   function senMessage(e) {
     e.preventDefault();
     console.log(newMessage);

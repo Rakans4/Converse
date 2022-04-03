@@ -9,19 +9,19 @@ function App() {
   const [friendCode, setFriendCode] = useState("");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  // const [socket, setSocket] = useState(io("localhost:5050"));
+  const [socket, setSocket] = useState(io("localhost:5050"));
   const [myCode, setMyCode] = useState("");
   const navigate = useNavigate();
-
+  // console.log(messages);
   useEffect(() => {
-    // socket.on("connect", () => {
-    //   console.log(socket.id);
-    // });
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
 
-    // socket.on('incoming-message', (data)=>{receiveMessage(data.content)});
+    socket.on('incoming-message', (data)=>{receiveMessage(data.content)});
 
     
-    // socket.on('code-register', (data)=>setMyCode(data))
+    socket.on('code-register', (data)=>setMyCode(data))
     
     return () => {
       //unmount logic here
@@ -32,20 +32,28 @@ function App() {
   
 
   function sendMessage(newMessage) {
-    setMessages([...messages, {content:newMessage, sent:1}]);
+    // setMessages([...messages, {content:newMessage, sent:1}]);
+    let messagesCopy = messages;
+    messagesCopy.push({content:newMessage, sent:1});
+    console.log(messagesCopy);
+    setMessages(messagesCopy);
     console.log('friend: '+friendCode+' message: '+newMessage)
-    // socket.emit(
-    //   "send-message",
-    //   JSON.stringify({
-    //     targetCode: friendCode,
-    //     content: newMessage,
-    //   })
-    // );
+    socket.emit(
+      "send-message",
+      JSON.stringify({
+        targetCode: friendCode,
+        content: newMessage,
+      })
+    );
   }
 
   function receiveMessage(newMessage){
-    console.log(messages)
-    setMessages([...messages, {content:newMessage, sent:0}]);
+    // console.log(newMessage)
+    let messagesCopy = messages;
+    messagesCopy.push({content:newMessage, sent:0});
+    console.log(messagesCopy);
+    // setMessages([...messages, {content:newMessage, sent:0}]);
+    setMessages(messagesCopy);
   }
 
   function validateChatCode(code) {
